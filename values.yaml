@@ -143,7 +143,7 @@ graylog:
     accessMode: ReadWriteOnce
     ## Graylog data Persistent Volume size
     ##
-    size: "20Gi"
+    size: "60Gi"
     ## Graylog data Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
