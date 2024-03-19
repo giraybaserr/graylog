@@ -576,7 +576,7 @@ graylog:
     processbufferProcessors: 5
 
 opensearch:
-  enabled: true
+  enabled: false
   extraEnvs:
     - name: plugins.security.ssl.http.enabled
       value: "false"
