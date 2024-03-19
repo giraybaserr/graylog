@@ -1,44 +1,42 @@
-# Graylog
+# Graylog Deployment on Kubernetes
 
-This chart provide the [Graylog][1] deployments.
-Note: It is strongly recommend to use on Official Graylog image to run this chart.
+This guide provides a step-by-step process to deploy Graylog on Kubernetes and configure ingress for access.
 
-## Quick Installation
+## Prerequisites
 
-This chart requires the following charts before install Graylog
+Ensure MongoDB is deployed in your Kubernetes cluster. If you're using an external OpenSearch or Elasticsearch cluster, make sure it's accessible from your Kubernetes cluster. If the OpenSearch or Elasticsearch cluster is deployed within the same Kubernetes cluster, ensure it's located in the same `namespace` as your Graylog deployment for seamless connectivity.
 
-1. MongoDB
-2. Opensearch(no needed)
+## Creating a Namespace
 
-To install the Graylog Chart with all dependencies
+Start by creating a dedicated namespace for Graylog:
 
 ```bash
-kubectl create namespace graylog
-
-helm install --namespace "graylog" graylog kongz/graylog
+kubectl create namespace "namespace"
 ```
+## Deploying Graylog with Helm
 
-## Install Chart
-
-To install the Graylog Chart into your Kubernetes cluster (This Chart requires persistent volume by default, you may need to create a storage class before install chart.
-
+Deploy Graylog into the namespace namespace, specifying the OpenSearch or Elasticsearch configuration:
 ```bash
-helm install --namespace "graylog" graylog kongz/graylog \
-  --set tags.install-opensearch=false\
-  --set graylog.opensearch.hosts=http://elasticsearch-cluster-master-headless.graylog.svc.cluster.local:9200
+helm repo add kongz https://charts.kongz.me
+helm repo update
+
+helm install graylog kongz/graylog \
+  --namespace "namespace" \
+  --set tags.install-opensearch=false \
+  --set graylog.opensearch.hosts=http://elasticsearch-cluster-master-headless.namespace.svc.cluster.local:9200 \
   --set graylog.opensearch.version=7
 ```
 
-After installation succeeds, you can get a status of Chart
-
+## Applying Ingress Configuration
+After Graylog is successfully deployed, apply the ingress configuration to access Graylog through a web browser:
 ```bash
-helm status graylog
+kubectl apply -f graylog-ingress.yaml --namespace "namespace"
 ```
+Make sure you have an graylog-ingress.yaml file prepared with the appropriate configuration for your ingress controller and domain.
 
-If you want to delete your Chart, use this command
+## Verifying the Deployment
 
+Check the status of your Graylog deployment:
 ```bash
-helm delete graylog
+helm status graylog --namespace "namespace"
 ```
-
-
