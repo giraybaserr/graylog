@@ -23,7 +23,7 @@ helm repo update
 helm install graylog kongz/graylog \
   --namespace "namespace" \
   --set tags.install-opensearch=false \
-  --set graylog.opensearch.hosts=http://elasticsearch-cluster-master-headless.namespace.svc.cluster.local:9200 \
+  --set graylog.opensearch.hosts=http://elasticsearch-master-headless.namespace.svc.cluster.local:9200 \
   --set graylog.opensearch.version=7
 ```
 
